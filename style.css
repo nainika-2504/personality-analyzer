@@ -30,7 +30,6 @@ body {
   font-family: 'DM Sans', sans-serif;
   background: var(--cream);
   color: var(--ink);
-  display: flex;
   min-height: 100vh;
   line-height: 1.6;
 }
@@ -130,10 +129,9 @@ body {
 
 /* ── Main Content ── */
 .main {
-  margin-left: var(--sidebar);
-  flex: 1;
-  max-width: 760px;
-  padding: 0 2.5rem 5rem;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 2rem 5rem;
 }
 
 /* ── Page Header ── */
@@ -141,6 +139,13 @@ body {
   padding: 3.5rem 0 2.5rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 2.5rem;
+}
+
+.header-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
 }
 .eyebrow {
   font-family: 'DM Mono', monospace;

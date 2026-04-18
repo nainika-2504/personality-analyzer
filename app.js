@@ -39,7 +39,6 @@ let answers = {};
 document.addEventListener("DOMContentLoaded", () => {
   buildQuiz();
   setupTabs();
-  setupApiKeyInput();
   setupWritingCounter();
 });
 
@@ -57,24 +56,9 @@ function setupTabs() {
   });
 }
 
-/* ── API Key ── */
-function setupApiKeyInput() {
-  const input = document.getElementById("api-key-input");
-  const status = document.getElementById("api-status");
-  input.addEventListener("input", () => {
-    const val = input.value.trim();
-    if (val.length > 10) {
-      status.textContent = "Key entered";
-      status.className = "api-status ok";
-    } else {
-      status.textContent = "";
-      status.className = "api-status hidden";
-    }
-  });
-}
-
+/* ── API Key — handled server-side via environment variable ── */
 function getApiKey() {
-  return document.getElementById("api-key-input").value.trim();
+  return "";
 }
 
 /* ── Build Quiz ── */
