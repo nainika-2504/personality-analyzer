@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personality Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+      <div class="brand">
+        <div class="brand-name">Personality Analyzer</div>
+        <div class="brand-sub">Powered by Gemini AI</div>
+      </div>
+
+      <div class="sidebar-section">
+        <label class="field-label">API Key</label>
+        <input type="password" id="api-key-input" placeholder="AIzaSy..." autocomplete="off">
+        <div id="api-status" class="api-status hidden"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <label class="field-label">How to use</label>
+        <div class="steps">
+          <div class="step"><span class="step-n">1</span><span class="step-t">Enter your Gemini API key above</span></div>
+          <div class="step"><span class="step-n">2</span><span class="step-t">Answer all 15 questions in the quiz</span></div>
+          <div class="step"><span class="step-n">3</span><span class="step-t">Click Generate to get your profile</span></div>
+          <div class="step"><span class="step-n">4</span><span class="step-t">Or paste your writing for analysis</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="meta-tags">
+          <span class="meta-tag">gemini-2.5-flash</span>
+          <span class="meta-tag">Big Five OCEAN</span>
+          <span class="meta-tag">MBTI</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div class="eyebrow">AI-Powered Assessment</div>
+      <h1 class="page-title">Personality<br>Analyzer</h1>
+      <p class="page-desc">A research-backed analysis of your personality using the Big Five OCEAN model and MBTI framework, powered by Google Gemini.</p>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="quiz">Personality Quiz</button>
+      <button class="tab" data-tab="writing">Writing Analysis</button>
+    </div>
+
+    <!-- Quiz Panel -->
+    <div id="panel-quiz" class="panel active">
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label">Progress</span>
+          <span class="progress-count" id="progress-count">0 / 15</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- Questions -->
+      <div id="questions-container"></div>
+
+      <!-- Submit -->
+      <div id="quiz-footer">
+        <div id="quiz-remaining" class="info-msg">Answer all questions to generate your report.</div>
+        <button id="btn-analyze-quiz" class="btn-primary hidden" onclick="submitQuiz()">
+          Generate Personality Report
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div id="quiz-results" class="results-container hidden"></div>
+      <button id="btn-retake" class="btn-secondary hidden" onclick="retakeQuiz()">Retake Quiz</button>
+    </div>
+
+    <!-- Writing Panel -->
+    <div id="panel-writing" class="panel hidden">
+      <div class="writing-intro">
+        <div class="writing-intro-title">Writing Style Analysis</div>
+        <div class="writing-intro-desc">Paste a sample of your writing — a journal entry, personal essay, email, or any text you have authored. The AI will analyze linguistic patterns, word choice, and structure to infer your personality profile.</div>
+      </div>
+
+      <textarea id="writing-input" placeholder="Paste your writing here. A minimum of 50 words is recommended for accurate analysis..." rows="10"></textarea>
+      <div id="word-count" class="word-count"></div>
+
+      <button class="btn-primary" onclick="submitWriting()" style="margin-top:1.25rem">
+        Analyze Writing
+      </button>
+
+      <div id="writing-results" class="results-container hidden"></div>
+      <button id="btn-new-writing" class="btn-secondary hidden" onclick="newWriting()">Analyze New Text</button>
+    </div>
+
+  </main>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="loading-box">
+      <div class="loader"></div>
+      <div class="loading-text" id="loading-text">Analyzing your responses...</div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
