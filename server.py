@@ -6,18 +6,15 @@ Open: http://localhost:8080
 """
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from google import genai
 import json
 import os
 import mimetypes
 
-# ── API KEY — reads from environment variable (set on Render) ────────────────
-# Locally: paste your key as the fallback value below
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
-# ─────────────────────────────────────────────────────────────────────────────
-
-# Render sets PORT automatically — falls back to 8080 locally
+# Port MUST be read before anything else for Render
 PORT = int(os.environ.get("PORT", 8080))
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
+
+from google import genai
 
 QUIZ_PROMPT = """You are an expert personality psychologist. Analyze these quiz responses and return a personality profile.
 
@@ -174,5 +171,8 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     server = HTTPServer(("0.0.0.0", PORT), Handler)
-    print(f"Personality Analyzer running on port {PORT}", flush=True)
+    # Print immediately so Render detects the open port
+    import sys
+    print(f"Server listening on 0.0.0.0:{PORT}", file=sys.stdout, flush=True)
+    sys.stdout.flush()
     server.serve_forever()
