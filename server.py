@@ -11,11 +11,13 @@ import json
 import os
 import mimetypes
 
-# ── YOUR API KEY ──────────────────────────────────────────────────────────────
-GEMINI_API_KEY = "AIzaSyBHS4R65-1RUhaeFlkSaioEaMN653zEjV4"
+# ── API KEY — reads from environment variable (set on Render) ────────────────
+# Locally: paste your key as the fallback value below
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
 # ─────────────────────────────────────────────────────────────────────────────
 
-PORT = 8080
+# Render sets PORT automatically — falls back to 8080 locally
+PORT = int(os.environ.get("PORT", 8080))
 
 QUIZ_PROMPT = """You are an expert personality psychologist. Analyze these quiz responses and return a personality profile.
 
@@ -171,11 +173,6 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("localhost", PORT), Handler)
-    print(f"\n  Personality Analyzer")
-    print(f"  Running at http://localhost:{PORT}")
-    print(f"  Press Ctrl+C to stop\n")
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print("\n  Server stopped.")
+    server = HTTPServer(("0.0.0.0", PORT), Handler)
+    print(f"Personality Analyzer running on port {PORT}", flush=True)
+    server.serve_forever()
