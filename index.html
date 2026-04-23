@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personality Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main class="main">
+
+        <button class="compat-trigger-btn" id="compat-trigger-btn">Check Compatibility</button>
+
+        <header class="page-header">
+            <div class="eyebrow">AI-Powered Assessment</div>
+            <h1 class="page-title">Personality<br>Analyzer</h1>
+            <p class="page-desc">A multi-method personality assessment combining questions, visual preference, and
+                scenario simulation — analyzed by Google Gemini using the Big Five OCEAN model.</p>
+            <div class="header-tags">
+                <span class="meta-tag">gemini-2.5-flash</span>
+                <span class="meta-tag">Big Five OCEAN</span>
+                <span class="meta-tag">MBTI</span>
+                <span class="meta-tag">Multi-Method</span>
+            </div>
+        </header>
+
+        <!-- Section stepper -->
+        <div class="section-stepper">
+            <div class="ss-step active" id="sp-1">
+                <div class="ss-num">1</div>
+                <div class="ss-lbl">Questions</div>
+            </div>
+            <div class="ss-line"></div>
+            <div class="ss-step" id="sp-2">
+                <div class="ss-num">2</div>
+                <div class="ss-lbl">Image Choice</div>
+            </div>
+            <div class="ss-line"></div>
+            <div class="ss-step" id="sp-3">
+                <div class="ss-num">3</div>
+                <div class="ss-lbl">Scenarios</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Questions -->
+        <div id="section-questions" class="asmt-section">
+            <div class="asmt-intro">
+                <span class="asmt-intro-label">Section 1 of 3</span>
+                <div class="asmt-intro-title">Personality Questions</div>
+                <div class="asmt-intro-desc">Answer honestly — there are no right or wrong answers. Choose what feels
+                    most natural to you.</div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-meta">
+                    <span class="progress-label">Progress</span>
+                    <span class="progress-count" id="q-count">0 / 8</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" id="q-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div id="questions-container"></div>
+            <div id="q-remaining" class="info-msg">Answer all questions to continue.</div>
+            <button id="btn-to-images" class="btn-primary hidden">Continue to Image Choice</button>
+        </div>
+
+        <!-- Section 2: Image Choice -->
+        <div id="section-images" class="asmt-section hidden">
+            <div class="asmt-intro">
+                <span class="asmt-intro-label">Section 2 of 3</span>
+                <div class="asmt-intro-title">Visual Preference</div>
+                <div class="asmt-intro-desc">Click the image that instinctively feels more like you. Go with your gut —
+                    do not overthink it.</div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-meta">
+                    <span class="progress-label">Progress</span>
+                    <span class="progress-count" id="img-count">0 / 4</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" id="img-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div id="image-rounds-container"></div>
+            <div id="img-remaining" class="info-msg">Choose an image in each round to continue.</div>
+            <button id="btn-to-scenarios" class="btn-primary hidden">Continue to Scenarios</button>
+        </div>
+
+        <!-- Section 3: Scenarios -->
+        <div id="section-scenarios" class="asmt-section hidden">
+            <div class="asmt-intro">
+                <span class="asmt-intro-label">Section 3 of 3</span>
+                <div class="asmt-intro-title">Situation Response</div>
+                <div class="asmt-intro-desc">Read each situation and choose how you would most likely respond. Pick what
+                    you would actually do, not what sounds best.</div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-meta">
+                    <span class="progress-label">Progress</span>
+                    <span class="progress-count" id="sc-count">0 / 4</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" id="sc-bar" style="width:0%"></div>
+                </div>
+            </div>
+            <div id="scenarios-container"></div>
+            <div id="sc-remaining" class="info-msg">Respond to all scenarios to generate your report.</div>
+            <button id="btn-analyze" class="btn-primary hidden">Generate My Personality Report</button>
+        </div>
+
+        <!-- Results -->
+        <div id="quiz-results" class="results-container hidden"></div>
+        <button id="btn-retake" class="btn-secondary hidden">Retake Assessment</button>
+
+    </main>
+
+    <!-- Compatibility Modal -->
+    <div id="compat-modal" class="compat-modal hidden">
+        <div class="compat-modal-inner">
+            <div class="compat-modal-header">
+                <div>
+                    <div class="compat-modal-eyebrow">Compatibility Check</div>
+                    <div class="compat-modal-title" id="compat-modal-title">Person 1 — Complete the Assessment</div>
+                </div>
+                <button class="compat-close-btn" onclick="closeCompat()">Close</button>
+            </div>
+            <div class="compat-steps">
+                <div class="compat-step active" id="step-ind-1">
+                    <div class="compat-step-num">1</div>
+                    <div class="compat-step-label">Person 1</div>
+                </div>
+                <div class="compat-step-line"></div>
+                <div class="compat-step" id="step-ind-2">
+                    <div class="compat-step-num">2</div>
+                    <div class="compat-step-label">Person 2</div>
+                </div>
+                <div class="compat-step-line"></div>
+                <div class="compat-step" id="step-ind-3">
+                    <div class="compat-step-num">3</div>
+                    <div class="compat-step-label">Results</div>
+                </div>
+            </div>
+            <div id="compat-progress-wrap">
+                <div class="progress-wrap">
+                    <div class="progress-meta">
+                        <span class="progress-label">Progress</span>
+                        <span class="progress-count" id="compat-progress-count">0 / 8</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-bar" id="compat-progress-bar" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="compat-questions"></div>
+            <div id="compat-footer">
+                <div id="compat-remaining" class="info-msg">Answer all questions to continue.</div>
+                <button id="btn-compat-next" class="btn-primary hidden" onclick="compatNext()">Continue to Person
+                    2</button>
+                <button id="btn-compat-analyze" class="btn-primary hidden" onclick="submitCompat()">Analyze
+                    Compatibility</button>
+            </div>
+            <div id="compat-results" class="hidden"></div>
+            <button id="btn-compat-restart" class="btn-secondary hidden" onclick="restartCompat()">Start Over</button>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-box">
+            <div class="loader"></div>
+            <div class="loading-text" id="loading-text">Analyzing your personality...</div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
