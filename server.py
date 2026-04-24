@@ -134,8 +134,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_file(os.path.join(os.path.dirname(__file__), "index.html"))
         elif path == "/style.css":
             self.send_file(os.path.join(os.path.dirname(__file__), "style.css"))
-        elif path == "/app.js":
-            self.send_file(os.path.join(os.path.dirname(__file__), "app.js"))
+        elif path == "/script.js":
+            self.send_file(os.path.join(os.path.dirname(__file__), "script.js"))
         else:
             self.send_response(404)
             self.end_headers()
