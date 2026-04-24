@@ -1,23 +1,23 @@
 /* ── Variables ── */
 :root {
-    --cream: #FAF8F5;
-    --white: #FFFFFF;
-    --stone: #F2EFE9;
-    --border: #E2DDD6;
-    --border2: #C8C3BA;
-    --ink: #1A1816;
-    --ink2: #4A4540;
-    --ink3: #8A847C;
-    --accent: #2D5BE3;
-    --accent-bg: #EEF2FD;
-    --green: #1A7A4A;
-    --green-bg: #EBF5EF;
-    --green-bd: #A8D5B5;
-    --red: #C0392B;
-    --red-bg: #FDF2F1;
-    --red-bd: #E8B4B0;
-    --amber: #B8600A;
-    --amber-bg: #FEF9EC;
+    --cream: #0B1120;
+    --white: rgba(30, 41, 59, 0.7);
+    --stone: rgba(15, 23, 42, 0.6);
+    --border: rgba(56, 189, 248, 0.2);
+    --border2: rgba(56, 189, 248, 0.5);
+    --ink: #F8FAFC;
+    --ink2: #CBD5E1;
+    --ink3: #94A3B8;
+    --accent: #38BDF8;
+    --accent-bg: rgba(56, 189, 248, 0.1);
+    --green: #34D399;
+    --green-bg: rgba(52, 211, 153, 0.1);
+    --green-bd: rgba(52, 211, 153, 0.3);
+    --red: #F87171;
+    --red-bg: rgba(248, 113, 113, 0.1);
+    --red-bd: rgba(248, 113, 113, 0.3);
+    --amber: #FBBF24;
+    --amber-bg: rgba(251, 191, 36, 0.1);
     --sidebar: 260px;
     --r: 4px;
     --r2: 8px;
@@ -38,10 +38,30 @@ html {
 
 body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
+    background: radial-gradient(circle at 15% 50%, rgba(15, 23, 42, 1), rgba(11, 17, 32, 1)), radial-gradient(circle at 85% 30%, rgba(30, 58, 138, 0.4), transparent 50%);
+    background-color: #0B1120;
     color: var(--ink);
     min-height: 100vh;
     line-height: 1.6;
+    background-attachment: fixed;
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: -1;
+    animation: backgroundDrift 20s linear infinite;
+}
+
+@keyframes backgroundDrift {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
 }
 
 /* ── Sidebar ── */
@@ -49,6 +69,8 @@ body {
     width: var(--sidebar);
     min-width: var(--sidebar);
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
     position: fixed;
     top: 0;
@@ -316,6 +338,8 @@ body {
 /* ── Question Card ── */
 .q-card {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1.5rem;
@@ -380,6 +404,8 @@ body {
 
 .option:hover {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-color: var(--border2);
     color: var(--ink);
 }
@@ -409,6 +435,8 @@ body {
     height: 6px;
     border-radius: 50%;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 /* ── Buttons ── */
@@ -416,21 +444,42 @@ body {
     display: block;
     width: 100%;
     padding: 0.75rem 1.5rem;
-    background: var(--ink);
-    color: var(--cream);
+    background: var(--accent);
+    color: #0B1120;
     border: none;
     border-radius: var(--r);
     font-family: 'DM Sans', sans-serif;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: all 0.3s ease;
     letter-spacing: 0.01em;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: conic-gradient(transparent, rgba(255,255,255,0.4), transparent 30%);
+    animation: rotate 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    100% { transform: rotate(360deg); }
 }
 
 .btn-primary:hover {
-    opacity: 0.82;
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+    transform: translateY(-2px);
 }
+
+
+
 
 .btn-primary:disabled {
     opacity: 0.4;
@@ -442,6 +491,8 @@ body {
     width: 100%;
     padding: 0.7rem 1.5rem;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--ink);
     border: 1px solid var(--border);
     border-radius: var(--r);
@@ -474,6 +525,8 @@ body {
 /* ── Writing Tab ── */
 .writing-intro {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1.5rem;
@@ -498,6 +551,8 @@ textarea {
     width: 100%;
     padding: 0.85rem 1rem;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     color: var(--ink);
@@ -624,6 +679,8 @@ textarea:focus {
 
 .summary-block {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1.25rem 1.5rem;
@@ -636,6 +693,8 @@ textarea:focus {
 /* ── OCEAN ── */
 .ocean-card {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 0.5rem 1.5rem;
@@ -726,6 +785,8 @@ textarea:focus {
 /* ── Tag grids ── */
 .tag-grid {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1rem 1.1rem;
@@ -772,6 +833,8 @@ textarea:focus {
     gap: 1rem;
     align-items: flex-start;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1rem 1.25rem;
@@ -815,6 +878,8 @@ textarea:focus {
 
 .tip-item {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-left: 3px solid var(--ink);
     border-radius: 0 var(--r) var(--r) 0;
@@ -828,6 +893,8 @@ textarea:focus {
 /* ── Writing insights ── */
 .insight-item {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-left: 3px solid var(--accent);
     border-radius: 0 var(--r) var(--r) 0;
@@ -869,6 +936,8 @@ textarea:focus {
     right: 1.5rem;
     z-index: 100;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: var(--ink);
     border: 1px solid var(--border2);
     border-radius: var(--r);
@@ -1113,6 +1182,8 @@ textarea:focus {
 /* Comparison bars */
 .compare-card {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 0.5rem 1.25rem;
@@ -1200,6 +1271,8 @@ textarea:focus {
 
 .dynamics-card {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1rem 1.1rem;
@@ -1237,6 +1310,8 @@ textarea:focus {
 
 .profile-mini {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1rem 1.1rem;
@@ -1372,6 +1447,8 @@ textarea:focus {
 .img-round {
     margin-bottom: 1.5rem;
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1.5rem;
@@ -1427,6 +1504,8 @@ textarea:focus {
     font-weight: 500;
     color: var(--ink2);
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-top: 1px solid var(--border);
     transition: background 0.2s, color 0.2s;
 }
@@ -1455,6 +1534,8 @@ textarea:focus {
    ══════════════════════════════════════════════════════════ */
 .scenario-card {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: var(--r2);
     padding: 1.5rem;
@@ -1542,6 +1623,8 @@ textarea:focus {
 
 .msg-bubble {
     background: var(--white);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border);
     border-radius: 0 var(--r2) var(--r2) var(--r2);
     padding: 0.85rem 1rem;
@@ -1601,6 +1684,23 @@ textarea:focus {
     font-weight: 300;
 }
 
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: -1;
+    animation: backgroundDrift 20s linear infinite;
+}
+
+@keyframes backgroundDrift {
+    0% { background-position: 0 0; }
+    100% { background-position: 40px 40px; }
+}
+
 /* Calendar card */
 .calendar-card {
     background: var(--stone);
@@ -1631,4 +1731,117 @@ textarea:focus {
     color: var(--ink2);
     font-weight: 300;
     line-height: 1.6;
+}
+/* -- AI Background Orbs -- */
+.orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
+    animation: floatOrb 20s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(56, 189, 248, 0.15);
+    top: -100px;
+    left: -100px;
+}
+
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    background: rgba(139, 92, 246, 0.15);
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -10s;
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, 50px) scale(1.1); }
+    100% { transform: translate(-50px, 80px) scale(0.9); }
+}
+
+/* -- Loading Update -- */
+.loading-subtext {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+/* -- XAI Tooltip -- */
+.xai-tooltip {
+    position: absolute;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--accent);
+    border-radius: var(--r2);
+    padding: 1rem;
+    width: 250px;
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(56, 189, 248, 0.2);
+    transition: opacity 0.2s;
+}
+
+.xai-tooltip.hidden {
+    opacity: 0;
+    display: block !important;
+    left: -9999px;
+}
+
+.xai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.25rem;
+}
+
+.xai-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.xai-confidence {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--green);
+}
+
+.xai-body {
+    font-size: 0.8rem;
+    color: var(--ink2);
+    line-height: 1.5;
+}
+
+/* -- Chart Container -- */
+.radar-chart-container {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border);
+    border-radius: var(--r2);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+    height: 350px;
+}
+
+.ocean-row {
+    position: relative;
+    cursor: help;
+}
+
+.ocean-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--r);
 }

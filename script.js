@@ -470,13 +470,16 @@ function renderResults(data, containerId, isWriting) {
     <div class="summary-block">${data.personality_summary || ""}</div>
 
     <div class="section-head">Big Five OCEAN Profile</div>
+    <div class="radar-chart-container">
+      <canvas id="oceanRadar-${containerId}"></canvas>
+    </div>
     <div class="ocean-card">
       ${oceanKeys.map(key => {
         const d = ocean[key] || {};
         const score = d.score || 0;
         return `
         <div class="ocean-item">
-          <div class="ocean-row">
+          <div class="ocean-row" onmouseover="showXAI(event, '${(d.xai_reasoning || '').replace(/'/g, "\\'")}', '${d.confidence || 0}')" onmouseout="hideXAI()">
             <span class="ocean-name">${oceanNames[key]}<span class="ocean-level ${levelClass(d.level)}">${d.level || ""}</span></span>
             <span class="ocean-score">${score} / 100</span>
           </div>
@@ -522,21 +525,95 @@ function renderResults(data, containerId, isWriting) {
   `;
 
     setTimeout(() => {
-        el.querySelectorAll(".ocean-fill[data-target]").forEach(b => {
-            b.style.width = b.dataset.target + "%";
+        document.querySelectorAll(`#${containerId} .ocean-fill`).forEach(f => {
+            f.style.width = f.getAttribute("data-target") + "%";
         });
-    }, 100);
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+        drawRadar(`oceanRadar-${containerId}`, ocean);
+    }, 50);
+}
+
+/* ── XAI & Charts ── */
+function showXAI(e, reason, conf) {
+    if (!reason) return;
+    const t = document.getElementById("xai-tooltip");
+    t.innerHTML = `<div class="xai-header"><span class="xai-title">Neural Reasoning</span><span class="xai-confidence">${conf}% Confidence</span></div><div class="xai-body">${reason}</div>`;
+    t.style.left = e.pageX + 15 + "px";
+    t.style.top = e.pageY + 15 + "px";
+    t.classList.remove("hidden");
+}
+
+function hideXAI() {
+    document.getElementById("xai-tooltip").classList.add("hidden");
+}
+
+function drawRadar(canvasId, oceanData) {
+    const ctx = document.getElementById(canvasId);
+    if(!ctx) return;
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Openness', 'Conscientiousness', 'Extraversion', 'Agreeableness', 'Neuroticism'],
+            datasets: [{
+                label: 'Score',
+                data: [
+                    oceanData.openness?.score||0,
+                    oceanData.conscientiousness?.score||0,
+                    oceanData.extraversion?.score||0,
+                    oceanData.agreeableness?.score||0,
+                    oceanData.neuroticism?.score||0
+                ],
+                backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                borderColor: 'rgba(56, 189, 248, 1)',
+                pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(139, 92, 246, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                    pointLabels: { color: 'rgba(255, 255, 255, 0.7)', font: { family: "'DM Mono', monospace", size: 10 } },
+                    ticks: { display: false, min: 0, max: 100 }
+                }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
 }
 
 /* ══════════════════════════════════════════════════════════
    LOADING / ERROR
    ══════════════════════════════════════════════════════════ */
+let loadingInterval;
+const aiPhrases = [
+    "Tokenizing semantic inputs...",
+    "Running multi-modal analysis...",
+    "Connecting to Gemini Neural Core...",
+    "Computing OCEAN vector weights...",
+    "Generating behavioral projections..."
+];
+
 function showLoading(msg) {
-    document.getElementById("loading-text").textContent = msg || "Processing...";
+    const el = document.getElementById("loading-text");
+    const subEl = document.getElementById("loading-subtext");
+    el.textContent = msg || "Initializing AI Core...";
+    subEl.textContent = "Establishing secure connection...";
     document.getElementById("loading-overlay").classList.remove("hidden");
+
+    let i = 0;
+    loadingInterval = setInterval(() => {
+        subEl.textContent = aiPhrases[i % aiPhrases.length];
+        i++;
+    }, 1500);
 }
+
 function hideLoading() {
+    clearInterval(loadingInterval);
     document.getElementById("loading-overlay").classList.add("hidden");
 }
 function showError(containerId, msg) {

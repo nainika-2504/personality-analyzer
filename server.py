@@ -27,11 +27,11 @@ Return ONLY valid JSON, no markdown, no code fences:
   "mbti_description": "One sentence description of this MBTI type",
   "personality_summary": "3-4 sentences summarizing the overall personality",
   "ocean_scores": {{
-    "openness":          {{"score": 72, "level": "High",     "description": "2 clear sentences"}},
-    "conscientiousness": {{"score": 65, "level": "Moderate", "description": "2 clear sentences"}},
-    "extraversion":      {{"score": 48, "level": "Moderate", "description": "2 clear sentences"}},
-    "agreeableness":     {{"score": 78, "level": "High",     "description": "2 clear sentences"}},
-    "neuroticism":       {{"score": 32, "level": "Low",      "description": "2 clear sentences"}}
+    "openness":          {{"score": 72, "level": "High",     "confidence": 92, "description": "2 clear sentences", "xai_reasoning": "Driven by response X"}},
+    "conscientiousness": {{"score": 65, "level": "Moderate", "confidence": 85, "description": "2 clear sentences", "xai_reasoning": "Driven by response Y"}},
+    "extraversion":      {{"score": 48, "level": "Moderate", "confidence": 78, "description": "2 clear sentences", "xai_reasoning": "Driven by response Z"}},
+    "agreeableness":     {{"score": 78, "level": "High",     "confidence": 95, "description": "2 clear sentences", "xai_reasoning": "Driven by response W"}},
+    "neuroticism":       {{"score": 32, "level": "Low",      "confidence": 88, "description": "2 clear sentences", "xai_reasoning": "Driven by response V"}}
   }},
   "key_strengths":    ["strength1","strength2","strength3","strength4","strength5"],
   "key_weaknesses":   ["weakness1","weakness2","weakness3","weakness4"],
@@ -58,11 +58,11 @@ Return ONLY valid JSON, no markdown, no code fences:
   "writing_style_insights": ["insight1","insight2","insight3","insight4"],
   "personality_summary": "3-4 sentences based on writing analysis",
   "ocean_scores": {{
-    "openness":          {{"score": 70, "level": "High",     "description": "2 sentences"}},
-    "conscientiousness": {{"score": 55, "level": "Moderate", "description": "2 sentences"}},
-    "extraversion":      {{"score": 42, "level": "Low",      "description": "2 sentences"}},
-    "agreeableness":     {{"score": 75, "level": "High",     "description": "2 sentences"}},
-    "neuroticism":       {{"score": 38, "level": "Low",      "description": "2 sentences"}}
+    "openness":          {{"score": 70, "level": "High",     "confidence": 90, "description": "2 sentences", "xai_reasoning": "Indicated by word choice X"}},
+    "conscientiousness": {{"score": 55, "level": "Moderate", "confidence": 80, "description": "2 sentences", "xai_reasoning": "Indicated by sentence structure Y"}},
+    "extraversion":      {{"score": 42, "level": "Low",      "confidence": 75, "description": "2 sentences", "xai_reasoning": "Indicated by topic Z"}},
+    "agreeableness":     {{"score": 75, "level": "High",     "confidence": 92, "description": "2 sentences", "xai_reasoning": "Indicated by phrasing W"}},
+    "neuroticism":       {{"score": 38, "level": "Low",      "confidence": 85, "description": "2 sentences", "xai_reasoning": "Indicated by expression V"}}
   }},
   "key_strengths":    ["s1","s2","s3","s4"],
   "key_weaknesses":   ["w1","w2","w3"],
@@ -148,10 +148,13 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if self.path == "/api/analyze-quiz":
                 answers = body.get("answers", [])
-                answers_text = "\n".join([
-                    f"- Q{i+1}: {a['question']} -> {a['answer']} [{a['trait']}]"
-                    for i, a in enumerate(answers)
-                ])
+                if isinstance(answers, str):
+                    answers_text = answers
+                else:
+                    answers_text = "\n".join([
+                        f"- Q{i+1}: {a['question']} -> {a['answer']} [{a['trait']}]"
+                        for i, a in enumerate(answers)
+                    ])
                 prompt = QUIZ_PROMPT.format(answers=answers_text)
                 result = call_gemini(api_key, prompt)
                 self.send_json({"success": True, "data": result})

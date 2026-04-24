@@ -11,9 +11,12 @@
         href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
     <main class="main">
 
         <button class="compat-trigger-btn" id="compat-trigger-btn">Check Compatibility</button>
@@ -175,11 +178,13 @@
     <div id="loading-overlay" class="loading-overlay hidden">
         <div class="loading-box">
             <div class="loader"></div>
-            <div class="loading-text" id="loading-text">Analyzing your personality...</div>
+            <div class="loading-text" id="loading-text">Initializing AI Core...</div>
+            <div class="loading-subtext" id="loading-subtext">Connecting to Gemini Model</div>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <div id="xai-tooltip" class="xai-tooltip hidden"></div>
 </body>
 
 </html>
