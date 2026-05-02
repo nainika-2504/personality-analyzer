@@ -65,7 +65,57 @@ The system operates on three distinct levels to minimize self-reporting bias:
 
 ---
 
-## 6. Conclusion & Future Scope
+## 6. System Design & Workflow
+
+### **A. Functional Flow Diagram (Horizontal)**
+The system follows a Left-to-Right logic, ensuring that multi-modal data is processed and aggregated before the AI inference stage.
+
+```mermaid
+flowchart LR
+    Start([User Start]) --> Methods{3-Phase Assessment}
+    
+    Methods --> Q[1. Personality Questions]
+    Methods --> V[2. Visual Preference]
+    Methods --> S[3. Situation Scenarios]
+    
+    Q --> Srv[Python Server]
+    V --> Srv
+    S --> Srv
+    
+    subgraph AI_Engine [Gemini AI Analysis]
+        Srv --> AI[Gemini 2.5 Flash]
+        AI --> Map[Psychological Profiling]
+    end
+    
+    Map --> Viz[Interactive Radar Charts]
+    Map --> Soul[Character Soulmates]
+    
+    Viz --> End([Final Report])
+    Soul --> End
+```
+
+### **B. Data Interaction Sequence**
+The sequence diagram illustrates the asynchronous communication between the client-side state machine and the backend AI proxy.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Server
+    participant GeminiAPI
+
+    User->>Frontend: Complete 3 Phases
+    Frontend->>Server: POST /api/analyze (Aggregated Data)
+    Server->>GeminiAPI: Generate Content (System Instructions + User Data)
+    GeminiAPI-->>Server: JSON Result (OCEAN + MBTI + Reasoning)
+    Server-->>Frontend: Delivery of Validated JSON
+    Frontend->>Frontend: Data Mapping & Chart Rendering
+    Frontend-->>User: Visual Dashboard Display
+```
+
+---
+
+## 7. Conclusion & Future Scope
 ### **Conclusion**
 The AI-Powered Personality Analysis System successfully bridges the gap between complex psychological theory and user-friendly technology. By using a multi-method input approach, it provides a significantly more nuanced report than standard online quizzes.
 
