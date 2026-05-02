@@ -53,6 +53,7 @@ The system operates on three distinct levels to minimize self-reporting bias:
 3.  **Career Pathing:** Generates 5 distinct career recommendations based on the combined psychological profile.
 4.  **Cultural Matching (Character Soulmates):** Matches the user with famous figures and characters from Anime and Bollywood, adding a layer of relatability and fun to the academic results.
 5.  **Growth Roadmaps:** Provides 3 actionable tips for personal development tailored specifically to the user's weaknesses.
+6.  **Interpersonal Compatibility Engine:** A dedicated module for two-person analysis. It compares two distinct personality profiles to calculate a "Compatibility Score" (0-100%) and identifies specific relationship strengths and friction points based on the delta between their OCEAN scores.
 
 ---
 
