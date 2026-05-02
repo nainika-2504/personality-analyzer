@@ -84,5 +84,27 @@ sequenceDiagram
     Frontend-->>User: Display Personality Insights
 ```
 
+### 3. System Flow Diagram
+```mermaid
+flowchart LR
+    Start([User Start]) --> Input{Choose Input}
+    Input -->|Quiz| Q[BFI Questions]
+    Input -->|Text| W[Writing Sample]
+    
+    Q --> Srv[Python Server]
+    W --> Srv
+    
+    subgraph AI_Engine [AI & Logic Layer]
+        Srv --> AI[Gemini 2.5 Flash]
+        AI --> Map[MBTI & Character Mapping]
+    end
+    
+    Map --> Viz[Radar Charts]
+    Map --> Soul[Character Soulmates]
+    
+    Viz --> End([Final Report])
+    Soul --> End
+```
+
 ## 📜 License
 &copy; 2026 University Intelligence Research Project. For academic and research purposes only.
