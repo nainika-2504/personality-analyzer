@@ -87,19 +87,22 @@ sequenceDiagram
 ### 3. System Flow Diagram
 ```mermaid
 flowchart LR
-    Start([User Start]) --> Input{Choose Input}
-    Input -->|Quiz| Q[BFI Questions]
-    Input -->|Text| W[Writing Sample]
+    Start([User Start]) --> Methods{3-Phase Assessment}
+    
+    Methods --> Q[1. Personality Questions]
+    Methods --> V[2. Visual Preference]
+    Methods --> S[3. Situation Scenarios]
     
     Q --> Srv[Python Server]
-    W --> Srv
+    V --> Srv
+    S --> Srv
     
-    subgraph AI_Engine [AI & Logic Layer]
+    subgraph AI_Engine [Gemini AI Analysis]
         Srv --> AI[Gemini 2.5 Flash]
-        AI --> Map[MBTI & Character Mapping]
+        AI --> Map[Psychological Profiling]
     end
     
-    Map --> Viz[Radar Charts]
+    Map --> Viz[Interactive Radar Charts]
     Map --> Soul[Character Soulmates]
     
     Viz --> End([Final Report])

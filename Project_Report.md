@@ -1,30 +1,23 @@
 # Project Report: AI-Powered Personality Analysis System
 
 ## 1. Project Overview
-The **AI-Powered Personality Analysis System** is a high-fidelity psychological assessment application designed to provide users with deep insights into their personality. It utilizes a hybrid methodology, combining the quantitative **Big Five Inventory (BFI)** questionnaire with qualitative **Psycholinguistic Analysis** of user writing samples. By leveraging the **Google Gemini 2.5 Flash** AI model, the system maps these traits to the Myers-Briggs Type Indicator (MBTI) and generates personalized career, relationship, and lifestyle recommendations.
+The **AI-Powered Personality Analysis System** is a high-fidelity psychological assessment application designed to provide users with deep insights into their personality. It utilizes a comprehensive 3-phase methodology, combining quantitative **Personality Questions** with qualitative **Visual Preference Analysis** and **Situation Scenarios**. By leveraging the **Google Gemini 2.5 Flash** AI model, the system analyzes these diverse inputs to generate personalized MBTI mapping, career recommendations, and character soulmate matches.
 
 ## 2. Module-Wise Breakdown
-*   **A. Frontend Interface (The User Layer):**
-    *   **Quiz Engine:** A dynamic, state-managed 20-question interface for the Big Five assessment.
-    *   **Linguistic Input Module:** A dedicated text analysis section for processing writing samples.
-    *   **Results Dashboard:** A responsive visual dashboard featuring glassmorphism design.
-*   **B. Backend Server (The Processing Layer):**
-    *   **Lightweight Python Server:** A pure Python implementation (`HTTPServer`) for handling API requests and serving static files.
-    *   **Security Manager:** Handles API key validation and local-only processing for privacy.
-*   **C. AI Orchestration (The Intelligence Layer):**
-    *   **Gemini API Integration:** Manages complex prompt engineering to ensure structured JSON output.
-    *   **XAI Module:** Generates "Explainable AI" reasoning for each personality trait score.
-*   **D. Visualization & Matching (The Insight Layer):**
-    *   **Data Viz Module:** Integrated Chart.js for real-time Radar Chart generation.
-    *   **Character Engine:** A matching algorithm that pairs MBTI types with famous figures and Anime/Bollywood characters.
+*   **A. 3-Phase Assessment Engine:**
+    *   **Phase 1: Personality Questions:** Interactive scoring of Big Five traits.
+    *   **Phase 2: Visual Preference:** Instinctive image-based choices to gauge subconscious leanings.
+    *   **Phase 3: Situation Scenarios:** Real-world response simulation to evaluate cognitive behavior.
+*   **B. Results Dashboard:** A responsive visual dashboard featuring glassmorphism design and real-time Chart.js integration.
+*   **C. Backend Server:** A pure Python implementation (`HTTPServer`) for handling AI orchestration and secure processing.
+*   **D. Intelligence Layer:** Gemini API integration for cross-referencing multi-method data into a cohesive psychological profile.
 
 ## 3. Functionalities
-*   **Dynamic BFI Assessment:** Interactive scoring of Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism (OCEAN).
-*   **AI Writing Analysis:** Deep-dive analysis of writing style to infer psychological traits.
-*   **MBTI Mapping:** Heuristic-based conversion of OCEAN scores to MBTI types (e.g., INTJ, ENFP).
+*   **Multi-Method Assessment:** Combines traditional questioning with visual and scenario-based tests.
+*   **AI-Generated Profile:** Deep-dive analysis of personality indicators across all 3 phases.
+*   **MBTI & OCEAN Visualization:** Mapping traits to established frameworks with interactive radar charts.
 *   **Interactive Character Soulmates:** 3D flip-cards showcasing matching characters from popular culture.
-*   **Visual Personality Radar:** High-fidelity graphical representation of trait strengths.
-*   **Career & Growth Insights:** AI-generated roadmaps for professional and personal development.
+*   **Explainable AI (XAI):** Provides detailed reasoning for why specific traits were assigned.
 
 ## 4. Technology Used
 *   **Programming Languages:**
@@ -84,9 +77,9 @@ The project successfully demonstrates how Generative AI can be integrated with t
 The system utilizes a complex prompt engineering strategy to transform raw user data (quiz answers or text) into a multi-layered psychological profile. The backend validates the Gemini AI output against a strict JSON schema to ensure that the frontend can reliably render 3D elements, charts, and recommendations without failure.
 
 ### B. Problem Statement
-Traditional personality tests are often tedious, one-dimensional, and fail to provide actionable insights. Users are frequently left with abstract scores but no explanation of *why* they received them or how to use them. There is a need for a modern, AI-integrated system that provides visual clarity, linguistic analysis, and culturally relevant matching (like character soulmates) to make self-discovery engaging.
+Traditional personality tests are often tedious and rely solely on self-reporting, which can be biased. There is a need for a multi-method system that combines direct questioning with subconscious visual preferences and real-world scenario simulations to create a more accurate and engaging psychological profile.
 
 ### C. Solution/Code
-The solution is a decoupled client-server architecture. The server acts as a secure proxy for the Gemini API, while the client manages a state-heavy interface that transforms JSON data into a premium visual experience.
+The solution is a multi-phase assessment architecture. By analyzing responses across three distinct domains (Questions, Images, and Scenarios), the Gemini AI can triangulate personality traits with higher confidence, providing a visual and interactive report that is both scientific and culturally relevant.
 
 > **Note:** The complete source code is available in the GitHub repository linked in Section 6.
