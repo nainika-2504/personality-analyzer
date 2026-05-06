@@ -1,18 +1,15 @@
-import requests
-import json
+import os
+from google import genai
 
-API_KEY = "AIzaSyA5aMFkWvgBXtZv-3nBvd9xee-pN3Cw15E"
-url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+api_key = "AIzaSyC0j03ztoevpx-OTf0Ju2yB5yHNdQIE8JQ"
+client = genai.Client(api_key=api_key)
 
-payload = {
-    "contents": [
-        {
-            "parts": [{"text": "Say hello"}]
-        }
-    ]
-}
-
-print(f"Testing URL: {url}")
-response = requests.post(url, json=payload)
-print(f"Status Code: {response.status_code}")
-print(f"Response Body: {response.text}")
+try:
+    print("Testing gemini-2.5-flash...")
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents="Say hello"
+    )
+    print(f"  Success! Response: {response.text.strip()}")
+except Exception as e:
+    print(f"  Failed: {e}")

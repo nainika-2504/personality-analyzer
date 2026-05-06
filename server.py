@@ -14,7 +14,17 @@ import random
 
 # Port MUST be read before anything else for Render
 PORT = int(os.environ.get("PORT", 8080))
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    try:
+        with open(os.path.join(os.path.dirname(__file__), "api_key.txt"), "r") as f:
+            GEMINI_API_KEY = f.read().strip()
+            print("Loaded API key from api_key.txt")
+    except:
+        GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE"
+        print("Using default placeholder API key (Check environment variables!)")
+else:
+    print("Loaded API key from environment variable")
 
 from google import genai
 
@@ -79,7 +89,13 @@ Return ONLY valid JSON, no markdown, no code fences:
 
 
 def call_gemini(api_key: str, prompt: str) -> dict:
-    models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+    # Trying models in order of likelihood to work with current API key and capacity
+    models_to_try = [
+        "gemini-2.0-flash", 
+        "gemini-2.5-flash", 
+        "gemini-1.5-flash",
+        "gemini-flash-latest"
+    ]
     last_error = None
     
     for model_name in models_to_try:
@@ -88,10 +104,13 @@ def call_gemini(api_key: str, prompt: str) -> dict:
             try:
                 print(f"  Attempting model: {model_name} (Try {attempt + 1})")
                 client = genai.Client(api_key=api_key)
+                start_time = time.time()
                 response = client.models.generate_content(
                     model=model_name,
                     contents=prompt
                 )
+                duration = time.time() - start_time
+                print(f"  Success with {model_name} in {duration:.2f}s")
                 
                 raw = response.text.strip()
                 if "```" in raw:
