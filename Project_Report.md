@@ -51,7 +51,7 @@ The system operates on three distinct levels to minimize self-reporting bias:
 1.  **Dynamic Radar Charts:** Provides a visual snapshot of the OCEAN traits with interactive data points.
 2.  **MBTI Mapping:** Automatically converts Big Five scores into the 16 Myers-Briggs types with a one-sentence descriptive summary.
 3.  **Career Pathing:** Generates 5 distinct career recommendations based on the combined psychological profile.
-4.  **Cultural Matching (Character Soulmates):** Matches the user with famous figures and characters from Anime and Bollywood, adding a layer of relatability and fun to the academic results.
+4.  **Notable Personality Matches:** Matches the user with famous real-world figures, adding a layer of relatability and insight to the results.
 5.  **Growth Roadmaps:** Provides 3 actionable tips for personal development tailored specifically to the user's weaknesses.
 6.  **Interpersonal Compatibility Engine:** A dedicated module for two-person analysis. It compares two distinct personality profiles to calculate a "Compatibility Score" (0-100%) and identifies specific relationship strengths and friction points based on the delta between their OCEAN scores.
 
@@ -89,7 +89,7 @@ flowchart LR
     end
     
     Map --> Viz[Interactive Radar Charts]
-    Map --> Soul[Character Soulmates]
+    Map --> Soul[Notable Figures]
     
     Viz --> End([Final Report])
     Soul --> End

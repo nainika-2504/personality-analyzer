@@ -9,6 +9,8 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import json
 import os
 import mimetypes
+import time
+import random
 
 # Port MUST be read before anything else for Render
 PORT = int(os.environ.get("PORT", 8080))
@@ -77,18 +79,54 @@ Return ONLY valid JSON, no markdown, no code fences:
 
 
 def call_gemini(api_key: str, prompt: str) -> dict:
-    client = genai.Client(api_key=api_key)
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
-    raw = response.text.strip()
-    if "```" in raw:
-        parts = raw.split("```")
-        raw = parts[1] if len(parts) > 1 else parts[0]
-        if raw.startswith("json"):
-            raw = raw[4:]
-    return json.loads(raw.strip())
+    models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
+    last_error = None
+    
+    for model_name in models_to_try:
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                print(f"  Attempting model: {model_name} (Try {attempt + 1})")
+                client = genai.Client(api_key=api_key)
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+                
+                raw = response.text.strip()
+                if "```" in raw:
+                    parts = raw.split("```")
+                    raw = parts[1] if len(parts) > 1 else parts[0]
+                    if raw.startswith("json"):
+                        raw = raw[4:]
+                
+                return json.loads(raw.strip())
+            
+            except Exception as e:
+                last_error = str(e)
+                print(f"  Error with {model_name}: {last_error}")
+                
+                # If location is not supported, don't retry this model, try the next one or fail
+                if "location is not supported" in last_error.lower():
+                    print(f"  Location error detected for {model_name}. Skipping to next model or reporting.")
+                    break # Break out of retry loop, try next model
+                
+                # If high demand (503), retry with backoff
+                if "503" in last_error or "high demand" in last_error.lower():
+                    wait_time = (2 ** attempt) + (random.random() * 1)
+                    print(f"  High demand detected. Retrying in {wait_time:.2f}s...")
+                    time.sleep(wait_time)
+                    continue
+                
+                # For other errors, still try next attempt or model
+                time.sleep(1)
+        
+    # If we get here, all models and retries failed
+    error_msg = f"API Error after multiple attempts. Last error: {last_error}"
+    if "location is not supported" in last_error.lower():
+        error_msg += ". IMPORTANT: Your Render server location might not be supported. Try changing your Render region to Oregon (us-west-2) in the dashboard."
+    
+    raise Exception(error_msg)
 
 
 class Handler(BaseHTTPRequestHandler):
