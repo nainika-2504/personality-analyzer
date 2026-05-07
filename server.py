@@ -15,6 +15,7 @@ import random
 # Port MUST be read before anything else for Render
 PORT = int(os.environ.get("PORT", 8080))
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+UPSTREAM_SERVER = os.environ.get("UPSTREAM_SERVER") # Used to bridge blocked regions
 if not GEMINI_API_KEY:
     try:
         with open(os.path.join(os.path.dirname(__file__), "api_key.txt"), "r") as f:
@@ -201,6 +202,26 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
         body = json.loads(self.rfile.read(length))
+
+        # --- PROXY BRIDGE LOGIC ---
+        # If this server is in a blocked region (like Singapore), it can forward 
+        # requests to a working server (like Oregon) to keep the link active.
+        if UPSTREAM_SERVER and self.path.startswith("/api/"):
+            import requests
+            try:
+                print(f"INFO: Proxying {self.path} to {UPSTREAM_SERVER}", flush=True)
+                # Forward the request to the upstream server
+                resp = requests.post(
+                    f"{UPSTREAM_SERVER.rstrip('/')}{self.path}", 
+                    json=body, 
+                    timeout=45
+                )
+                self.send_json(resp.json(), resp.status_code)
+                return
+            except Exception as e:
+                print(f"ERROR: Proxy bridge failed: {e}", flush=True)
+                # If proxy fails, fall through and try local Gemini call as fallback
+        
         api_key = body.get("api_key", "").strip() or GEMINI_API_KEY
 
         try:
